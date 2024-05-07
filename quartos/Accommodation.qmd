@@ -1,0 +1,69 @@
+---
+title: "Accommodation"
+author: "sara"
+format: 
+  html:
+    embed-resources: true
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(here)
+library(scales)
+
+purrr::map(list.files(here("R"), full.names = T), source)
+```
+
+
+
+# Context
+
+Travelling in Iceland, I want to learn something from a numbers perspective as well. here, I am examining the data available for accommodation.
+
+The Statistical Office of Icceland has a database that is accessible via an [API](https://www.scb.se/api_en/) that seems to come from the Swedish Statistical office, and handily enough has an [R package](https://github.com/rOpenGov/pxweb) as well :-) 
+
+# Total number of overnight stays in Iceland over time
+
+```{r}
+df_region <- get_accommodation_by_region()
+
+df_aggr <- df_region |> 
+  group_by(year, unity) |> 
+  summarise(value = sum(value))
+```
+
+```{r}
+df_aggr |> 
+  ggplot(aes(x = year, y = value, color = unity)) +
+  geom_line() +
+  scale_y_continuous(labels = label_number()) +
+  labs(title = "Number of arrivals and overnight stays in Iceland",
+       color = "",
+       y = "")
+```
+
+
+# by month
+
+```{r}
+df_aggr_month <- df_region |> 
+  group_by(year, unity, month) |> 
+  summarise(value = sum(value))
+```
+
+```{r}
+df_aggr_month |> 
+  filter(unity == "Overnight stays") |> 
+  ggplot(aes(x = month, y = value, color = year, group = year)) +
+  geom_line() +
+  scale_y_continuous(labels = label_number()) +
+  labs(title = "Number of overnight stays in Iceland by month",
+       color = "",
+       y = "")
+```
+
+
+# by region
+
+# by origin
