@@ -15,13 +15,9 @@ library(scales)
 purrr::map(list.files(here("R"), full.names = T), source)
 ```
 
-
-
 # Context
 
 Travelling in Iceland, I want to learn something from a numbers perspective as well. here, I am examining the data available for accommodation.
-
-The Statistical Office of Icceland has a database that is accessible via an [API](https://www.scb.se/api_en/) that seems to come from the Swedish Statistical office, and handily enough has an [R package](https://github.com/rOpenGov/pxweb) as well :-) 
 
 # Total number of overnight stays in Iceland over time
 
@@ -35,8 +31,9 @@ df_aggr <- df_region |>
 
 ```{r}
 df_aggr |> 
-  ggplot(aes(x = year, y = value, color = unity)) +
+  ggplot(aes(x = year, y = value)) +
   geom_line() +
+  facet_wrap(vars(unity)) +
   scale_y_continuous(labels = label_number()) +
   labs(title = "Number of arrivals and overnight stays in Iceland",
        color = "",
@@ -63,7 +60,28 @@ df_aggr_month |>
        y = "")
 ```
 
-
-# by region
-
 # by origin
+
+# data sources
+
+## Iceland data
+
+The Statistical Office of Icceland has a database that is accessible via an [API](https://www.scb.se/api_en/) that seems to come from the Swedish Statistical office, and handily enough has an [R package](https://github.com/rOpenGov/pxweb) as well :-) 
+
+The only negative point here is that the metadata and the json request is all in Icelandic, so there is no way I can infer anything, I have to click through the database, but ok, I get there.
+
+## Swiss data
+
+Hey, I thought I know my way around Swiss open data. Turns out I was about to learn something new as well... mostly that it's a rather large pain that the data from the federal statistical office mostly are not yet on the open data portal](https://opendata.swiss/de), which otherwise is an excellent source (nor are they available as [linked open data](https://lindas.admin.ch/). So I again click through a website... to learn that the numbers in [hotels](https://www.bfs.admin.ch/bfs/en/home/statistics/tourism/surveys/hesta.html) and [not-quite-hotels](https://www.bfs.admin.ch/bfs/en/home/statistics/tourism/tourist-accommodation/supplementary-accommodation.html) (apartments, campgrounds, group accommodation) are gathered and published separately, and I have to do the sums myself. And, they are not (at all!) published in the same format... sad times. Thanks to [Felix' package](https://felixluginbuhl.com/BFS/), I can read the hotel data fairly easily, but the not-quite-hotel data... phu. I need two different types of excels, again separately for apartments, campgrounds and group accommodation. This turns out to be much more work than I anticipated!
+
+## Zurich data
+
+The data for the city of Zurich is listed on their [open data website](https://data.stadt-zuerich.ch/dataset/zt_unterkunft) but is basically a pointer to the [API](https://zt.zuerich.com/en/open-data/v2) run by Zurich tourism. Yet another data format...
+
+# Motorisierungsgrad
+
+wär einfacher
+
+[ZH](https://opendata.swiss/de/dataset/motorisierungsgrad-nach-rechtsform-stadtquartier-und-jahr-seit-2002)
+[CH](https://www.bfs.admin.ch/asset/de/je-d-11.03.02.01.02)
+[Iceland](https://px.hagstofa.is/pxen/pxweb/en/Umhverfi/Umhverfi__5_samgongur__3_okutaekiogvegir/SAM03101.px/)
