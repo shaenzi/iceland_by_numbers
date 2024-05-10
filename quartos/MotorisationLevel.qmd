@@ -1,0 +1,57 @@
+---
+title: "Motorisation level"
+author: "Sara Hänzi"
+format: 
+  html:
+    embed-resources: true
+    theme: vapor
+    toc: true
+---
+
+# Context
+
+Travelling in Iceland, I want to learn something from a numbers perspective as well. here, I am examining the data available for the motorisation level - or how many cars there are per 1000 people. Coming from a Swiss urban area, many of the Icelandic places feel quite American in that the first thing you see of anything (at least outside Reykjavik) is a large parking space. So let's look at the numbers. 
+
+# Getting the data
+
+The Iceland data comes from [here](https://px.hagstofa.is/pxen/pxweb/en/Umhverfi/Umhverfi__5_samgongur__3_okutaekiogvegir/SAM03101.px/). As a comparison, I also load the data for [Switzerland](https://www.bfs.admin.ch/bfs/de/home/statistiken/kataloge-datenbanken.assetdetail.30148893.html). As this is an ugly excel, the data extraction is rather peculiar. The same unfortunately goes for the data for the city of Zurich (and hey, that's my bad, I created that) - while there is a [csv](https://opendata.swiss/de/dataset/motorisierungsgrad-nach-rechtsform-stadtquartier-und-jahr-seit-2002), it contains the motorisation levels per city district, not for the whole city. So again, I extract this from an [excel](https://www.stadt-zuerich.ch/content/dam/web/de/politik-verwaltung/statistik-und-daten/daten/mobilitaet/VER200T2007_Motorisierungsgrad-nach-Quartier.xlsx)...
+
+```{r output=FALSE}
+library(dplyr)
+library(ggplot2)
+library(here)
+library(scales)
+library(thematic)
+
+bs_theme_used <- bslib::bs_theme(bootswatch = rmarkdown::metadata$format$html$theme)
+
+thematic_rmd(bg = bslib::bs_get_variables(bs_theme_used, "dark"),
+             fg = bslib::bs_get_variables(bs_theme_used, "light"),
+             accent = bslib::bs_get_variables(bs_theme_used, "primary"))
+
+purrr::map(list.files(here("R"), full.names = T), source)
+```
+
+```{r output=FALSE}
+df_ice <- get_motorisation_iceland()
+df_ch <- get_motorisation_ch()
+df_zh <- get_motorisation_zh()
+
+df <- bind_rows(df_ice, df_ch, df_zh)
+```
+
+# all at once
+
+```{r}
+df |> 
+  ggplot(aes(x = year, y = n_vehicles, color = area, group = area)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0,1000)) +
+  labs(title = "Level of motorisation",
+       subtitle = "Number of passenger vehicles per 1000 people",
+       y = "",
+       x = "Year")
+```
+
+Well. The state of the economy is pretty closely matched by that Iceland curve... however, it would be interesting to know how many of these cars are actually used by locals, and how many are owned by rental car companies. Given the masses of tourists that flock to Iceland these days, it might be a sizeable chunk, and explain some of the differences between Iceland and Switzerland.
+

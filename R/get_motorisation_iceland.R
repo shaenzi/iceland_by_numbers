@@ -14,6 +14,7 @@ get_motorisation_iceland <- function() {
   df <- as.data.frame(px) |>
     janitor::clean_names() |>
     rename(n_vehicles = registered_motor_vehicles_1950_2021) |>
+    mutate(year = as.numeric(year)) |>
     select(-vehicles) |>
     mutate(area = "Iceland")
 
