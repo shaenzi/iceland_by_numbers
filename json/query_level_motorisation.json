@@ -1,0 +1,16 @@
+{
+  "query": [
+    {
+      "code": "Ökutæki",
+      "selection": {
+        "filter": "item",
+        "values": [
+          "5"
+        ]
+      }
+    }
+  ],
+  "response": {
+    "format": "json"
+  }
+}

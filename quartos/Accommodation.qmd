@@ -83,5 +83,10 @@ The data for the city of Zurich is listed on their [open data website](https://d
 wär einfacher
 
 [ZH](https://opendata.swiss/de/dataset/motorisierungsgrad-nach-rechtsform-stadtquartier-und-jahr-seit-2002)
+
 [CH](https://www.bfs.admin.ch/asset/de/je-d-11.03.02.01.02)
+
+[Ch but in English](https://www.bfs.admin.ch/bfs/de/home/statistiken/kataloge-datenbanken.assetdetail.30148893.html)
+
 [Iceland](https://px.hagstofa.is/pxen/pxweb/en/Umhverfi/Umhverfi__5_samgongur__3_okutaekiogvegir/SAM03101.px/)
+
