@@ -1,8 +1,11 @@
-library(dplyr)
-library(pxweb)
-# documentation for this package https://ropengov.github.io/pxweb/articles/pxweb.html or https://github.com/rOpenGov/pxweb
-# for the underlying API https://www.scb.se/api_en/
-
+#' get_motorisation_iceland
+#'
+#' @details documentation for pxweb https://ropengov.github.io/pxweb/articles/pxweb.html or https://github.com/rOpenGov/pxweb
+#' for the underlying API https://www.scb.se/api_en/
+#'
+#' @return tibble with motorisation level by year for iceland
+#' @export
+#'
 get_motorisation_iceland <- function() {
   url <- "https://px.hagstofa.is:443/pxen/api/v1/en/Umhverfi/5_samgongur/3_okutaekiogvegir/SAM03101.px"
 

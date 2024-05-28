@@ -1,9 +1,11 @@
-library(dplyr)
-library(pxweb)
-# documentation for this package https://ropengov.github.io/pxweb/articles/pxweb.html or https://github.com/rOpenGov/pxweb
-# for the underlying API https://www.scb.se/api_en/
-
-
+#' get_accommodation_by_region
+#'
+#' #' @details documentation for pxweb https://ropengov.github.io/pxweb/articles/pxweb.html or https://github.com/rOpenGov/pxweb
+#' for the underlying API https://www.scb.se/api_en/
+#'
+#' @return tibble with accomodation iceland by year, month and redion
+#' @export
+#'
 get_accommodation_by_region <- function() {
   url <- "https://px.hagstofa.is:443/pxen/api/v1/en/Atvinnuvegir/ferdathjonusta/gisting/3_allartegundirgististada/SAM01601.px"
 
@@ -25,6 +27,14 @@ get_accommodation_by_region <- function() {
   return(df)
 }
 
+#' get_accommodation_by_origin
+#'
+#' #' @details documentation for pxweb https://ropengov.github.io/pxweb/articles/pxweb.html or https://github.com/rOpenGov/pxweb
+#' for the underlying API https://www.scb.se/api_en/
+#'
+#' @return tibble accommodation iceland by origin of guests
+#' @export
+#'
 get_accommodation_by_origin <- function() {
   url <- "https://px.hagstofa.is:443/pxen/api/v1/en/Atvinnuvegir/ferdathjonusta/gisting/3_allartegundirgististada/SAM01601.px"
 
