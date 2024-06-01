@@ -61,7 +61,80 @@ df_aggr_month |>
        y = "")
 ```
 
-# by origin
+# Swiss data as comparison
+
+```{r message=FALSE}
+df_ch <- get_accommodation_ch()
+df_hotels_ch <- get_accommodation_ch(hotels_only = T)
+```
+
+
+## by year
+
+aggregate data by year
+```{r}
+df_ch_year <- df_ch |> 
+  group_by(year, indicator) |> 
+  summarise(value = sum(value))
+```
+
+```{r}
+df_ch_year |> 
+  ggplot(aes(x = year, y = value)) +
+  geom_line() +
+  facet_wrap(vars(indicator)) +
+  scale_y_continuous(labels = label_number()) +
+  labs(title = "Number of arrivals and overnight stays in Switzerland",
+       color = "",
+       y = "")
+```
+
+### hotels only
+
+for a longer-term trend, look at hotels only (available since 2005 vs. 2016 for supplementary)
+
+```{r}
+df_hotels_ch_year <- df_hotels_ch |> 
+  group_by(year, indicator) |> 
+  summarise(value = sum(value))
+
+df_hotels_ch_year |> 
+  ggplot(aes(x = year, y = value)) +
+  geom_line() +
+  facet_wrap(vars(indicator)) +
+  scale_y_continuous(labels = label_number()) +
+  labs(title = "Number of arrivals and overnight stays in Switzerland",
+       subtitle = "hotels only!",
+       color = "",
+       y = "")
+```
+
+
+## by month
+
+```{r}
+df_ch_month <- df_ch |> 
+  group_by(year, indicator, month) |> 
+  summarise(value = sum(value))
+```
+
+```{r}
+df_ch_month |> 
+  filter(indicator == "Overnight stays") |> 
+  ggplot(aes(x = month, y = value, color = year, group = year)) +
+  geom_line() +
+  scale_y_continuous(labels = label_number()) +
+  labs(title = "Number of overnight stays in Switzerland by month",
+       color = "",
+       y = "")
+```
+
+
+# side-by-side comparison
+
+## by year
+
+## by month
 
 # data sources
 
@@ -73,7 +146,7 @@ The only negative point here is that the metadata and the json request is all in
 
 ## Swiss data
 
-Hey, I thought I know my way around Swiss open data. Turns out I was about to learn something new as well... mostly that it's a rather large pain that the data from the federal statistical office mostly are not yet on the open data portal](https://opendata.swiss/de), which otherwise is an excellent source (nor are they available as [linked open data](https://lindas.admin.ch/). So I again click through a website... to learn that the numbers in [hotels](https://www.bfs.admin.ch/bfs/en/home/statistics/tourism/surveys/hesta.html) and [not-quite-hotels](https://www.bfs.admin.ch/bfs/en/home/statistics/tourism/tourist-accommodation/supplementary-accommodation.html) (apartments, campgrounds, group accommodation) are gathered and published separately, and I have to do the sums myself. And, they are not (at all!) published in the same format... sad times. Thanks to [Felix' package](https://felixluginbuhl.com/BFS/), I can read the hotel data fairly easily, but the not-quite-hotel data... phu. I need two different types of excels, again separately for apartments, campgrounds and group accommodation. This turns out to be much more work than I anticipated!
+Hey, I thought I know my way around Swiss open data. Turns out I was about to learn something new as well... mostly that it's a rather large pain that the data from the federal statistical office mostly are not (yet - hopefully) on the open data portal](https://opendata.swiss/de), which otherwise is an excellent source (nor are they available as [linked open data](https://lindas.admin.ch/). So I again click through a website... to learn that the numbers in [hotels](https://www.bfs.admin.ch/bfs/en/home/statistics/tourism/surveys/hesta.html) and [not-quite-hotels](https://www.bfs.admin.ch/bfs/en/home/statistics/tourism/tourist-accommodation/supplementary-accommodation.html) (apartments, campgrounds, group accommodation) are gathered and published separately, and I have to do the sums myself. And, they are not (at all!) published in the same format... sad times. Thanks to [Felix' package](https://felixluginbuhl.com/BFS/), I can read the hotel data fairly easily, but the not-quite-hotel data... phu. Excels, again separately for apartments, campgrounds and group accommodation. This turns out to be much more work than I anticipated!
 
 ## Zurich data
 

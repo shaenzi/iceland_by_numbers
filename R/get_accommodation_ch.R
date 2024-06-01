@@ -1,5 +1,5 @@
 
-get_accommodation_ch <- function() {
+get_accommodation_ch <- function(hotels_only = FALSE) {
   # hotels
   hotel_nr <- "px-x-1003020000_102"
   query_filter <- prepare_metadata_hotels(hotel_nr)
@@ -10,6 +10,10 @@ get_accommodation_ch <- function() {
     dplyr::rename(value = hotel_sector_arrivals_and_overnight_stays_of_open_establishments) |>
     dplyr::mutate(accommodation = "hotels",
                   year = as.numeric(year))
+
+  if (hotels_only) {
+    return(df_hotels)
+  }
 
   # supplementary accomodation (DE: Parahotellerie) is separate, and is again split
   # into group accommodation, apartments and campgrounds
@@ -60,7 +64,13 @@ get_accommodation_ch <- function() {
 
   # join the hotels and the rest
 
-  df <- dplyr::bind_rows(df_hotels, df_supp)
+  df <- dplyr::bind_rows(df_hotels, df_supp) |>
+    dplyr::mutate(month = factor(month, levels = month.name)) |>
+    # only keep the years for which we have both hotel and supplementary data
+    # hotel data since 2005, supplementary only since 2016 :-/
+    dplyr::filter(year %in% intersect(unique(df_supp$year), unique(df_hotels$year)))
+
+  return(df)
 }
 
 # get_accomodation_bs <- function() {
